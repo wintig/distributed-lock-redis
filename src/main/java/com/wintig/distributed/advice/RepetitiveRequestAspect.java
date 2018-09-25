@@ -6,6 +6,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -26,12 +28,14 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 public class RepetitiveRequestAspect {
 
+    private static Logger logger = LoggerFactory.getLogger(RepetitiveRequestAspect.class);
+
     @Autowired
     private RedisTemplate redisTemplate;
 
 
     @Around(value = "@annotation(com.wintig.distributed.annotation.RepetitiveRequest)")
-    public void checkRepetitiveRequest(ProceedingJoinPoint joinPoint) {
+    public Object checkRepetitiveRequest(ProceedingJoinPoint joinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         Method targetMethod = methodSignature.getMethod();
@@ -47,8 +51,11 @@ public class RepetitiveRequestAspect {
 
         //判断是否重复请求
         if (repetitiveRequest(repetitiveRequestLimitKey, repetitiveRequest.limitTime())) {
+            logger.info("repetitive request key : " + repetitiveRequestLimitKey);
             throw new RuntimeException("请不要重复提交！");
         }
+
+        return joinPoint.proceed();
 
     }
 
