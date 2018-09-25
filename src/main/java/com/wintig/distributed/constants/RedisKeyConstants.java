@@ -9,7 +9,7 @@ public class RedisKeyConstants {
 
     public interface UrlLimit {
 
-        String REPETITIVE_REQUEST_LIMIT = "com.wintig:repetitive_request_limit:";
+        String REPETITIVE_REQUEST_LIMIT = "com_wintig:repetitive_request_limit:";
 
     }
 

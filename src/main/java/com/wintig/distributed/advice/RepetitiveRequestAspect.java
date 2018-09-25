@@ -31,7 +31,7 @@ public class RepetitiveRequestAspect {
 
 
     @Around(value = "@annotation(com.wintig.distributed.annotation.RepetitiveRequest)")
-    public void checkRepetitiveRequest(ProceedingJoinPoint joinPoint) throws Throwable {
+    public void checkRepetitiveRequest(ProceedingJoinPoint joinPoint) {
 
         MethodSignature methodSignature = (MethodSignature)joinPoint.getSignature();
         Method targetMethod = methodSignature.getMethod();
