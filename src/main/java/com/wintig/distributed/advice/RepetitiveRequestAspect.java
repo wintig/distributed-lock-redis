@@ -34,6 +34,9 @@ public class RepetitiveRequestAspect {
     private RedisTemplate redisTemplate;
 
 
+    /**
+     * 核心逻辑：根据用户的SessionID来进行判断
+     */
     @Around(value = "@annotation(com.wintig.distributed.annotation.RepetitiveRequest)")
     public Object checkRepetitiveRequest(ProceedingJoinPoint joinPoint) throws Throwable {
 
